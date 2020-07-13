@@ -12,7 +12,7 @@
 #include "stm32f1xx_hal.h"
 #include "stm32f1xx_hal_conf.h"
 #include "stm32f1xx_hal_gpio.h"
-#include "stm32f1xx_HAL_UART.h"
+#include "stm32f1xx_hal_uart.h"
 
 
 /***** VARIABLES ******/
@@ -90,8 +90,10 @@ void ET_action(unsigned char * cmd)
 {
 	if(cmd[1] > 15 || cmd[1] < 0) // pin must be in range [0,15]
 		return;
+	if(cmd[0] < 0  || cmd[0] > 1)
+		return;
 
-	//HAL_UART_Transmit(ET.UART, "Got Valid CMD\n", 14, 50); //DEBUG
+	HAL_UART_Transmit(ET.UART, "Got Valid CMD\n", 14, 50); //DEBUG
 	switch(cmd[0])
 	{
 	case CMD_PinMode:
@@ -127,14 +129,14 @@ void ET_set_pinMode(int pin, int pinmode)
 	case PinMode_Input:
 		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		//HAL_UART_Transmit(ET.UART, "PinMode_Input\n", 14, 50); //DEBUG
+		HAL_UART_Transmit(ET.UART, "PinMode_Input\n", 14, 50); //DEBUG
 		break;
 
 	case PinMode_Output:
 		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
 		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-		//HAL_UART_Transmit(ET.UART, "PinMode_Output\n", 15, 50); //DEBUG
+		HAL_UART_Transmit(ET.UART, "PinMode_Output\n", 15, 50); //DEBUG
 
 	default: return;
 	}
@@ -144,7 +146,7 @@ void ET_set_pinMode(int pin, int pinmode)
 
 void ET_set_digitalWrite(int pin, int output){
 	HAL_GPIO_WritePin(GPIOA, pin, output);
-	//HAL_UART_Transmit(ET.UART, "CMD_DigitalWrite\n", 17, 50); //DEBUG
+	HAL_UART_Transmit(ET.UART, "CMD_DigitalWrite\n", 17, 50); //DEBUG
 }
 
 void ET_send_digitalRead()
