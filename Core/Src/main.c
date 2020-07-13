@@ -62,7 +62,11 @@ static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN 0 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-	i++;
+	ET_action(cmd);
+//	i++;
+//	HAL_UART_Transmit(&huart1, "CMD\n", 4, 10); // DEBUG
+//	HAL_UART_Transmit(&huart1, cmd, 3, 10); // DEBUG
+
 //	HAL_UART_Transmit(&huart1, "got\n", 4, 50); // DEBUG
 //	if(i < 3)
 //	{
@@ -121,11 +125,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_UART_Receive_IT(&huart1, &cmd[i], 1);
+	  HAL_UART_Receive_IT(&huart1, cmd, 3);
 	  if(i == 3){
-		  i=0;
-		  HAL_UART_Transmit(&huart1, cmd, 3, 10);
-		  ET_action(cmd);
+//		  i=0;
+//		  HAL_UART_Transmit(&huart1, cmd, 3, 10);
+//		  ET_action(cmd);
 	  }
 
 
