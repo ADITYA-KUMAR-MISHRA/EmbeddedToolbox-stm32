@@ -131,16 +131,17 @@ void ET_set_pinMode(unsigned char pin, unsigned char pinmode)
 	switch(pinmode)
 	{
 	case PinMode_Input:
+
 		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
 
 		HAL_UART_Transmit(ET.UART, "PinMode_Input\nPin:", 18, 10); //DEBUG
 		HAL_UART_Transmit(ET.UART, pin+48, 1, 10); //DEBUG
 		HAL_UART_Transmit(ET.UART, "\n", 1, 10); //DEBUG
-
 		break;
 
 	case PinMode_Output:
+
 		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 		GPIO_InitStruct.Pull = GPIO_NOPULL;
 		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -149,10 +150,11 @@ void ET_set_pinMode(unsigned char pin, unsigned char pinmode)
 		HAL_UART_Transmit(ET.UART, pin+48, 1, 10); //DEBUG
 		HAL_UART_Transmit(ET.UART, "\n", 1, 10); //DEBUG
 
+
 	default: return;
 	}
 
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+//	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 void ET_set_digitalWrite(unsigned char pin, unsigned char output){
