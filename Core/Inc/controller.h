@@ -14,6 +14,9 @@
 #include "stm32f1xx_hal_gpio.h"
 #include "stm32f1xx_hal_uart.h"
 
+//DEBUG
+GPIO_InitTypeDef GPIO_InitStruct = {0};
+
 
 /***** VARIABLES ******/
 typedef struct __ET_ConfStruct
@@ -125,15 +128,13 @@ void ET_send_data()
 
 void ET_set_pinMode(unsigned char pin, unsigned char pinmode)
 {
-	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	GPIO_InitStruct.Pin = 1<<pin; // Set pin
+//	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 	switch(pinmode)
 	{
-	case PinMode_Input:
 
-		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
+
+	case PinMode_Input:
 
 		HAL_UART_Transmit(ET.UART, "PinMode_Input\nPin:", 18, 10); //DEBUG
 		HAL_UART_Transmit(ET.UART, pin+48, 1, 10); //DEBUG
@@ -141,20 +142,21 @@ void ET_set_pinMode(unsigned char pin, unsigned char pinmode)
 		break;
 
 	case PinMode_Output:
+		  /*Configure GPIO pin Output Level */
+		  HAL_GPIO_WritePin(GPIOB, 1<<pin, GPIO_PIN_SET);
 
-		GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+		  GPIO_InitStruct.Pin = 1<<pin;
+		  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+		  GPIO_InitStruct.Pull = GPIO_NOPULL;
+		  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+		  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 		HAL_UART_Transmit(ET.UART, "PinMode_Output\nPin:", 18, 10); //DEBUG
 		HAL_UART_Transmit(ET.UART, pin+48, 1, 10); //DEBUG
 		HAL_UART_Transmit(ET.UART, "\n", 1, 10); //DEBUG
 
-
 	default: return;
 	}
-
-//	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
 
 void ET_set_digitalWrite(unsigned char pin, unsigned char output){
