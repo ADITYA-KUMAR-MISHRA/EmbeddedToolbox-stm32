@@ -63,22 +63,6 @@ static void MX_USART1_UART_Init(void);
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	ET_action(cmd);
-//	i++;
-//	HAL_UART_Transmit(&huart1, "CMD\n", 4, 10); // DEBUG
-//	HAL_UART_Transmit(&huart1, cmd, 3, 10); // DEBUG
-
-//	HAL_UART_Transmit(&huart1, "got\n", 4, 50); // DEBUG
-//	if(i < 3)
-//	{
-//		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-//		return;
-//	}
-//	else
-//	{
-//		i=0;
-//		HAL_UART_Transmit(&huart1, "got all\n", 8, 50); // DEBUG
-//		ET_action(cmd);
-//	}
 }
 
 /* USER CODE END 0 */
@@ -114,6 +98,8 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_UART_Transmit(&huart1, "Hi there", 8, 10);
+
+  // Configure Port and UART that project will use
   ET.GPIO_PORT = GPIOB;
   ET.UART = &huart1;
   /* USER CODE END 2 */
@@ -125,11 +111,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_UART_Receive_IT(&huart1, cmd, 3);
-	  if(i == 3){
-
-	  }
-
+	  HAL_UART_Receive_IT(&huart1, cmd, 3); // recieve 3 byte then interrupt
 
   }
   /* USER CODE END 3 */
