@@ -120,10 +120,7 @@ void ET_action(unsigned char * cmd)
 
 void ET_send_data()
 {
-//	unsigned char gpio_data[2];
-//	gpio_data[0] = ET.GPIO_PORT->IDR << 8;  // LSB
-//	gpio_data[0] = ET.GPIO_PORT->IDR << 8;  // MSB
-
+	ET_send_digitalRead();
 }
 
 void ET_set_pinMode(unsigned char pin, unsigned char pinmode)
@@ -162,18 +159,16 @@ void ET_set_pinMode(unsigned char pin, unsigned char pinmode)
 void ET_set_digitalWrite(unsigned char pin, unsigned char output){
 	HAL_GPIO_WritePin(GPIOB, 1<<pin, output);
 
-//	HAL_UART_Transmit(ET.UART, str_buff, 50, 50); //DEBUG
-//	HAL_UART_Transmit(ET.UART, "CMD_DigitalWrite\nPin:", 21, 10); //DEBUG
-//	HAL_UART_Transmit(ET.UART, pin+10, 1, 10); //DEBUG
-//	HAL_UART_Transmit(ET.UART, "OP:", 3, 10); //DEBUG
-//	HAL_UART_Transmit(ET.UART, output? "High":"Low", 1, 10); //DEBUG
-//	HAL_UART_Transmit(ET.UART, "\n", 1, 10); //DEBUG
-
 }
 
 void ET_send_digitalRead()
 {
-//	HAL_GPIO_ReadPin(GPIOx, GPIO_Pin);
+	// All 16 pin data is send, regardless of which pin is enabled as input
+	unsigned char data[3];
+	data[0] = CMD_DigitalReadouts;
+	data[1] = GPIOB->IDR << 8; // 8bit lsb
+	data[2] = GPIOB->IDR; //8 bit msb
+	HAL_UART_Transmit(ET.UART, data, 3, 10);
 }
 
 void ET_send_analogRead()
